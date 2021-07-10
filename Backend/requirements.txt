@@ -14,3 +14,6 @@ pydantic[email]
 
 # hashing password lib
 passlib[bcrypt]
+
+# fastapi-mail
+fastapi-mail
