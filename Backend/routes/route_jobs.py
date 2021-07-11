@@ -35,3 +35,12 @@ async def update_job(id: int, job: JobCreate, job_update: job_board = Depends(ge
         detail=f"Job with id {id} does not exist")
     return {"response": "Successfully updated the Job."}
 
+@router.delete("/delete/{id}")
+async def delete_job(id: int, job_delete: job_board = Depends(get_db)):
+    owner_id = 1
+    response = await job_delete.delete_job_by_id(id = id, owner_id = owner_id)
+    if not response:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+        detail=f"Job with id {id} does not exist")
+    return {"response": "Successfully deleted the Job."}
+

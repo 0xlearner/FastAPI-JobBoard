@@ -1,10 +1,9 @@
 from typing import List
 
-
-from sqlalchemy import update
-from sqlalchemy.engine import result
 from sqlalchemy.orm import Session
+from sqlalchemy import update
 from sqlalchemy.future import select
+from sqlalchemy import delete
 
 from schemas.users import UserCreate
 from schemas.jobs import JobCreate
@@ -55,3 +54,11 @@ class job_board():
         .execution_options(synchronize_session="fetch"))
         return 1
 
+    async def delete_job_by_id(self, id: int, owner_id):
+        exist_job = await self.db_session.get(Job, id)
+        if not exist_job:
+            return 0
+        await self.db_session.execute(delete(Job)
+        .where(Job.id==id)
+        .execution_options(synchronize_session=False))
+        return 1
