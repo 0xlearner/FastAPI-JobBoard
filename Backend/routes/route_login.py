@@ -22,6 +22,10 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(),
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                     detail="Incorrect username or password")
 
+    if user.is_active == False:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Please, activate your Account")
+
     access_token = Auth.get_token(data={"sub": user.username}, 
                             expires_delta=settings.USER_TOKEN_LIFETIME)
 
