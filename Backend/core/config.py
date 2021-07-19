@@ -1,4 +1,5 @@
 import os
+import smtplib
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -16,4 +17,18 @@ class Settings:
     POSTGRES_DB: str = os.getenv("POSTGRES_DB", "job_board_db")
     DATABASE_URL = f"postgresql+asyncpg://{POSTGRES_USER}:{POSTGRES_PASS}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}"
 
+
+    SECRET_KEY: str = os.getenv("SECRET_KEY")
+    TOKEN_ALGORITHM = 'HS256'
+    REGISTRATION_TOKEN_LIFETIME = 60 * 60
+    USER_TOKEN_LIFETIME = 30 * 60
+
+
+    
+    EMAIL_HOST = ('smtp.gmail.com', 587)
+    SSL = True
+    EMAIL_HOST_USER ='zeroxlearner@gmail.com'
+    EMAIL_HOST_PASSWORD = 'z3rox_Learner'
+
+    
 settings = Settings()

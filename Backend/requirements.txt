@@ -17,3 +17,6 @@ passlib[bcrypt]
 
 # fastapi-mail
 fastapi-mail
+
+# JWT tokens
+python-jose
