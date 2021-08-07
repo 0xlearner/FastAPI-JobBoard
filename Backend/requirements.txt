@@ -20,3 +20,9 @@ fastapi-mail
 
 # JWT tokens
 python-jose
+
+# template-engine
+jinja2
+
+# static files
+aiofiles

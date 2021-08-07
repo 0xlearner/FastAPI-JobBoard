@@ -18,7 +18,7 @@ class Users():
         self.db_session = db_session
 
     
-            #print('user created')
+        #print(self.db_session)
 
     #@classmethod
     async def save(self, user_instance):
@@ -26,7 +26,7 @@ class Users():
             self.db_session.add(user_instance)
             await self.db_session.flush()
         except Exception as error:
-            self.db_session.rollback()
+            await self.db_session.rollback()
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     #@classmethod
