@@ -47,7 +47,7 @@ const Register = () => {
 
   return (
     <div className="column">
-      <form className="box" onSubmit={handelSubmit}>
+      <form className="box" onSubmit={handleSubmit}>
         <h1 className="title has-text-centered">Register</h1>
         <div className="field">
           <label className="label">Username</label>
@@ -55,8 +55,8 @@ const Register = () => {
             <input
               type="username"
               placeholder="Enter username"
-              value={userDetail.username}
-              onChange={updateForm}
+              value={username}
+              onChange={(e) => setUserName(e.target.value)}
               className="input"
               required
             />
@@ -68,8 +68,8 @@ const Register = () => {
             <input
               type="email"
               placeholder="Enter email"
-              value={userDetail.email}
-              onChange={updateForm}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="input"
               required
             />
@@ -81,8 +81,8 @@ const Register = () => {
             <input
               type="password"
               placeholder="Enter password"
-              value={userDetail.password}
-              onChange={updateForm}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="input"
               required
             />
@@ -98,4 +98,4 @@ const Register = () => {
   );
 };
 
-export default SignupPage;
+export default Register;
