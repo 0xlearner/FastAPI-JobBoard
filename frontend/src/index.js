@@ -3,11 +3,11 @@ import ReactDOM from "react-dom";
 import "bulma/css/bulma.min.css";
 import App from "./App";
 
-//import { UserRegContext } from "./context/UserContext";
+import { UserProvider } from "./context/UserContext";
 
 ReactDOM.render(
-  <React.StrictMode>
+  <UserProvider>
     <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  </UserProvider>,
+  document.getElementById("root")
 );

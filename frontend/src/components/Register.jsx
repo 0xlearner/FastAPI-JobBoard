@@ -1,55 +1,49 @@
-import React, { useContext } from "react";
-//import { useHistory } from 'react-router';
-//import axios from 'axios';
-//import Cookies from 'js-cookie';
+import React, { useContext, useState } from "react";
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
-import { UserRegContext } from "../context/UserContext";
-//import ErrorMessage from "./ErrorMessage";
-//import auth from './auth';
+import { UserContext } from "../context/UserContext";
+import ErrorMessage from "./ErrorMessage";
 
-const SignupPage = () => {
-	const [ userDetail, setUserDetail ] = useContext(UserRegContext);
+const Register = () => {
+  const [username, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [, setToken] = useContext(UserContext);
 
-	const updateForm = (e) => {
-		setUserDetail({ ...userDetail, [e.target.name]: e.target.value });
-	};
+  
+  const submitRegistration = async () => {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: JSON.stringify({ username: username, email: email, password: password }),
+    };
 
-	// website to obtain fetch from curl: https://kigiri.github.io/fetch/
-	const handelSubmit = async (e) => {
-		e.preventDefault();
+    await axios
+        .post("/api/signup", requestOptions)
+        .then((response) => {
+          console.log(response);
+          alert(response);
+          Cookies.set("token", response.data.access_token);
+          return response;
+        })
+        .catch((error) => {
+          console.log(error.message);
+          alert(error);
+        });
+  };
 
-		const url = '/api/signup';
-
-		const response = await fetch(url, {
-			method: 'POST',
-			mode: 'cors',
-			cache: 'no-cache',
-			credentials: 'same-origin',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			redirect: 'follow',
-			referrerPolicy: 'no-referrer',
-			body: JSON.stringify({
-				username: userDetail['username'],
-				email: userDetail['email'],
-				password: userDetail['password']
-			})
-		});
-
-		response.json().then((response) => {
-			if (response.status === 'ok') {
-				alert('User added successfully');
-			} else {
-				alert('Failed to add User');
-			}
-		});
-		setUserDetail({
-			username: '',
-			email: '',
-			password: ''
-		});
-	};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (username.length > 5) {
+      submitRegistration();
+    } else {
+      setErrorMessage(
+        "Ensure that the passwords match and greater than 5 characters"
+      );
+    }
+  };
 
   return (
     <div className="column">
