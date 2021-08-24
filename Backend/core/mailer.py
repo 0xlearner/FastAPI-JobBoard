@@ -29,7 +29,7 @@ class Mailer:
 
     @staticmethod
     def send_confirmation_message(token: str, mail_to: str):
-        confirmation_url = f'http://localhost:8000/registration/verify/{token}'
+        confirmation_url = f'http://localhost:8000/api/verify/{token}'
         message = '''Hi!
     Please confirm your registration: {}'''.format(confirmation_url)
         Mailer.send_message(

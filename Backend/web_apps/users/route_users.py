@@ -30,6 +30,13 @@ async def register_user(request: Request, user_reg: Users = Depends(get_user_db)
     if await form.is_valid():
         user = UserCreate(username=form.username, email=form.email, password=form.password)
         try:
+            # CHECK IF USER ALREADY EXISTS
+            if await user_reg.get_user_by_email(email=form.email) is not None:
+                form.__dict__.get("errors").append("Email address is already in use.")
+            # CHECK IF USERNAME ALREADY EXISTS
+            elif await user_reg.get_user_by_username(username=form.username) is not None:
+                form.__dict__.get("errors").append("Username is already in use.")
+
             user = await user_reg.create_user(user=user)
             confirmation_token = Auth.get_confirmation_token(
                             user.email,
@@ -46,7 +53,6 @@ async def register_user(request: Request, user_reg: Users = Depends(get_user_db)
                 )
             return {f"Hello {user.username}, thanks for choosing our services. Please check your email to activate your account."}
 
-        except IntegrityError:
-            form.__dict__.get("errors").append("Duplicate username or email")
+        except:
             return templates.TemplateResponse("users/register.html", form.__dict__)
     return templates.TemplateResponse("users/register.html", form.__dict__) 

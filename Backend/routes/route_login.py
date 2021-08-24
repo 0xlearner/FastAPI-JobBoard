@@ -7,6 +7,7 @@ from core.config import settings
 from db.repository.users_data_access_layer import Users
 from core.auth import Auth
 from depends import get_user_db
+from schemas import users
 
 
 
@@ -53,4 +54,8 @@ async def get_current_user_from_token(token: str = Depends(oauth2_scheme), user_
     if user is None:
         raise credentials_exception
 
+    return user
+
+@router.get("/users", response_model= users.ShowUser)
+async def get_user(user: users.UserCreate = Depends(get_current_user_from_token)):
     return user

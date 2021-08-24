@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Request
 from fastapi import Depends
 from jose import jwt
 
@@ -16,7 +16,7 @@ router = APIRouter()
 
 get_settings = Settings()
 
-@router.post("/", response_model=ShowUser)
+@router.post("/signup")
 async def create_user(form_data: UserCreate = Depends(), users: Users = Depends(get_user_db)):
     # CHECK IF USER ALREADY EXISTS
     if await users.get_user_by_email(email=form_data.email) is not None:
@@ -52,7 +52,7 @@ async def create_user(form_data: UserCreate = Depends(), users: Users = Depends(
             detail="Email couldn't be send. Please try again."
         )
     # RETURN USER
-    return new_user
+    return {"res": "created"}
 
 @router.get("/verify/{token}", response_model=ShowUser)
 async def verify(token: str, users: Users = Depends(get_user_db)):
@@ -89,4 +89,8 @@ async def verify(token: str, users: Users = Depends(get_user_db)):
     user.confirmation = None
     user.is_active = True
     await users.save(user)
-    return user
+    return {"res": "user created"}
+
+@router.get("/")
+async def root():
+    return {"message": "Job Board"}
