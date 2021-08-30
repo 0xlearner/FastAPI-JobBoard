@@ -5,14 +5,14 @@ from db.base import Base
 from routes import router_base
 from web_apps.base import webapp_router
 from fastapi.staticfiles import StaticFiles
-from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.cors import CORSMiddleware
 
 
 app = FastAPI(title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION)
 
 origins = [
     "http://127.0.0.1:8000",
-    "http://127.0.0.1:3000"
+    "http://localhost:3000",
 ]
 app.add_middleware(
     CORSMiddleware,

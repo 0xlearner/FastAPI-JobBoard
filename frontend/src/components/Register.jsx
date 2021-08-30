@@ -1,8 +1,8 @@
-import React, { useContext, useState } from "react";
-import axios from 'axios';
-import Cookies from 'js-cookie';
+import React, { useState } from "react";
+// import axios from 'axios';
+// import Cookies from 'js-cookie';
 
-import { UserContext } from "../context/UserContext";
+// import { UserContext } from "../context/UserContext";
 import ErrorMessage from "./ErrorMessage";
 
 const Register = () => {
@@ -10,28 +10,26 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [, setToken] = useContext(UserContext);
+  // const [, setToken] = useContext(UserContext);
 
   
   const submitRegistration = async () => {
+    let formData = new FormData();
+    formData.append('username', username);
+    formData.append('email', email);  
+    formData.append('password', password);
+
     const requestOptions = {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: JSON.stringify({ username: username, email: email, password: password }),
+      body: formData,
     };
+ 
+    const response = await fetch("http://127.0.0.1:8000/api/signup", requestOptions);
+    const data = await response.json();
 
-    await axios
-        .post("/api/signup", requestOptions)
-        .then((response) => {
-          console.log(response);
-          alert(response);
-          Cookies.set("token", response.data.access_token);
-          return response;
-        })
-        .catch((error) => {
-          console.log(error.message);
-          alert(error);
-        });
+    if (!response.ok) {
+      setErrorMessage(data.detail);
+    } 
   };
 
   const handleSubmit = (e) => {
@@ -40,7 +38,7 @@ const Register = () => {
       submitRegistration();
     } else {
       setErrorMessage(
-        "Ensure that the passwords match and greater than 5 characters"
+        "Ensure that the username is greater than 5 characters"
       );
     }
   };
@@ -88,7 +86,7 @@ const Register = () => {
             />
           </div>
         </div>
-     
+        <ErrorMessage message={errorMessage} />
         <br />
         <button className="button is-primary" type="submit">
           Register

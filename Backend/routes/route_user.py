@@ -16,7 +16,7 @@ router = APIRouter()
 
 get_settings = Settings()
 
-@router.post("/signup")
+@router.post("/signup", response_model=ShowUser)
 async def create_user(form_data: UserCreate = Depends(), users: Users = Depends(get_user_db)):
     # CHECK IF USER ALREADY EXISTS
     if await users.get_user_by_email(email=form_data.email) is not None:
@@ -52,7 +52,7 @@ async def create_user(form_data: UserCreate = Depends(), users: Users = Depends(
             detail="Email couldn't be send. Please try again."
         )
     # RETURN USER
-    return {"res": "created"}
+    return new_user
 
 @router.get("/verify/{token}", response_model=ShowUser)
 async def verify(token: str, users: Users = Depends(get_user_db)):
@@ -89,7 +89,7 @@ async def verify(token: str, users: Users = Depends(get_user_db)):
     user.confirmation = None
     user.is_active = True
     await users.save(user)
-    return {"res": "user created"}
+    return user
 
 @router.get("/")
 async def root():
